@@ -64,7 +64,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Virtual Tourist" id="cz3-KS-8CJ">
-                        <barButtonItem key="rightBarButtonItem" title="edit" id="X7U-bW-HD0">
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="X7U-bW-HD0">
                             <connections>
                                 <action selector="barButtonPressed:" destination="BYZ-38-t0r" id="rHr-uF-zLQ"/>
                             </connections>
@@ -73,6 +73,7 @@
                     <connections>
                         <outlet property="deletePinLabel" destination="Jn3-2B-KBe" id="aWi-kf-DPD"/>
                         <outlet property="mapView" destination="Q9Z-Nm-bnJ" id="SbQ-T1-xIX"/>
+                        <segue destination="AMy-mR-M9K" kind="show" identifier="photoSegue" id="eJn-DK-c2a"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -100,7 +101,7 @@
                                 <rect key="frame" x="0.0" y="556" width="600" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Lyn-lJ-hLX"/>
-                                    <barButtonItem title="Item" id="YEn-xV-99t">
+                                    <barButtonItem title="New Collection" id="YEn-xV-99t">
                                         <connections>
                                             <action selector="toolbarButtonPressed:" destination="AMy-mR-M9K" id="GK8-sn-GZk"/>
                                         </connections>
@@ -108,12 +109,6 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="sLl-CM-L0a"/>
                                 </items>
                             </toolbar>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" showsBuildings="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LlF-KK-C5z">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="200"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="GL9-k7-ua6"/>
-                                </constraints>
-                            </mapView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="PXU-YZ-6x7">
                                 <rect key="frame" x="0.0" y="199" width="600" height="357"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -141,6 +136,12 @@
                                     <outlet property="delegate" destination="AMy-mR-M9K" id="yKb-yD-boc"/>
                                 </connections>
                             </collectionView>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" showsBuildings="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LlF-KK-C5z">
+                                <rect key="frame" x="0.0" y="64" width="600" height="136"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="136" id="GL9-k7-ua6"/>
+                                </constraints>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -153,7 +154,7 @@
                             <constraint firstItem="PXU-YZ-6x7" firstAttribute="trailing" secondItem="VID-fh-ukX" secondAttribute="trailing" id="TDZ-eE-bnQ"/>
                             <constraint firstItem="VID-fh-ukX" firstAttribute="top" secondItem="PXU-YZ-6x7" secondAttribute="bottom" id="dCZ-sX-85J"/>
                             <constraint firstAttribute="trailing" secondItem="LlF-KK-C5z" secondAttribute="trailing" id="e5l-l9-ZYK"/>
-                            <constraint firstItem="LlF-KK-C5z" firstAttribute="top" secondItem="ITd-KR-dMg" secondAttribute="top" id="pa1-Kt-GIP"/>
+                            <constraint firstItem="LlF-KK-C5z" firstAttribute="top" secondItem="ITd-KR-dMg" secondAttribute="top" constant="64" id="pa1-Kt-GIP"/>
                         </constraints>
                     </view>
                     <connections>

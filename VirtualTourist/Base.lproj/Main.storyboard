@@ -35,32 +35,52 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Q9Z-Nm-bnJ">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <gestureRecognizers/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="FEZ-Pc-9HJ"/>
+                                    <outletCollection property="gestureRecognizers" destination="Jxn-12-Fyy" appends="YES" id="z77-Ps-Tq7"/>
                                 </connections>
                             </mapView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap Pins to Delete" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jn3-2B-KBe">
+                                <rect key="frame" x="0.0" y="600" width="600" height="80"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="Fc4-0e-8o2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Q9Z-Nm-bnJ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="MiP-YY-RBH"/>
                             <constraint firstAttribute="trailing" secondItem="Q9Z-Nm-bnJ" secondAttribute="trailing" id="RpE-cx-0Nw"/>
                             <constraint firstItem="Q9Z-Nm-bnJ" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="S0w-7f-KaN"/>
+                            <constraint firstItem="Jn3-2B-KBe" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" constant="80" id="UdL-PF-bm5"/>
+                            <constraint firstItem="Jn3-2B-KBe" firstAttribute="leading" secondItem="Q9Z-Nm-bnJ" secondAttribute="leading" id="ZfM-LA-6NY"/>
+                            <constraint firstItem="Jn3-2B-KBe" firstAttribute="trailing" secondItem="Q9Z-Nm-bnJ" secondAttribute="trailing" id="hoi-tK-Qm3"/>
                             <constraint firstItem="Q9Z-Nm-bnJ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="ksv-T8-ouc"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Virtual Tourist" id="cz3-KS-8CJ">
-                        <barButtonItem key="rightBarButtonItem" title="test" id="X7U-bW-HD0">
+                        <barButtonItem key="rightBarButtonItem" title="edit" id="X7U-bW-HD0">
                             <connections>
-                                <segue destination="AMy-mR-M9K" kind="show" id="X5I-sM-6LN"/>
+                                <action selector="barButtonPressed:" destination="BYZ-38-t0r" id="rHr-uF-zLQ"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="deletePinLabel" destination="Jn3-2B-KBe" id="aWi-kf-DPD"/>
                         <outlet property="mapView" destination="Q9Z-Nm-bnJ" id="SbQ-T1-xIX"/>
-                        <segue destination="AMy-mR-M9K" kind="show" id="43L-8G-5bf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer cancelsTouchesInView="NO" delaysTouchesEnded="NO" allowableMovement="10" minimumPressDuration="0.5" id="Jxn-12-Fyy">
+                    <connections>
+                        <action selector="longPressedGesture:" destination="BYZ-38-t0r" id="u3N-HU-tpN"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="325" y="387"/>
         </scene>
@@ -147,7 +167,4 @@
             <point key="canvasLocation" x="1048" y="387"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="X5I-sM-6LN"/>
-    </inferredMetricsTieBreakers>
 </document>

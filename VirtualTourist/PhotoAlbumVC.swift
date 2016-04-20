@@ -45,7 +45,16 @@ class PhotoAlbumVC: UIViewController, UICollectionViewDelegate, UICollectionView
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("id", forIndexPath: indexPath)
         cell.backgroundColor = UIColor.blackColor()
+        let imgView = cell.viewWithTag(100) as! UIImageView
         
+        let photoModel = photoArray[indexPath.row]
+        let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+        dispatch_async(dispatch_get_global_queue(priority, 0)) {
+            let img = DownloadWorker.sharedInstance.getPhotoData(photoModel)
+            dispatch_async(dispatch_get_main_queue(), {
+                imgView.image = img
+            })
+        }
         return cell
     }
     
@@ -63,7 +72,7 @@ class PhotoAlbumVC: UIViewController, UICollectionViewDelegate, UICollectionView
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return numCell
+        return photoArray.count
     }
     //MARK: Misc
     func updateToolbarTitle() {

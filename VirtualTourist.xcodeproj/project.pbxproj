@@ -10,7 +10,7 @@
 		333E96481CC6D45D0048B9E7 /* TravelMapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333E96471CC6D45D0048B9E7 /* TravelMapVC.swift */; };
 		333E964A1CC6D4680048B9E7 /* PhotoAlbumVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333E96491CC6D4680048B9E7 /* PhotoAlbumVC.swift */; };
 		333E964C1CC6D51F0048B9E7 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 333E964B1CC6D51F0048B9E7 /* MapKit.framework */; };
-		3348C74F1CC736460046179A /* FlickerWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3348C74E1CC736460046179A /* FlickerWorker.swift */; };
+		3348C74F1CC736460046179A /* DownloadWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3348C74E1CC736460046179A /* DownloadWorker.swift */; };
 		3348C7511CC743E20046179A /* FlickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3348C7501CC743E20046179A /* FlickerModel.swift */; };
 		33A3E1BF1CC1760100773D5D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A3E1BE1CC1760100773D5D /* AppDelegate.swift */; };
 		33A3E1C41CC1760100773D5D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33A3E1C21CC1760100773D5D /* Main.storyboard */; };
@@ -23,7 +23,7 @@
 		333E96471CC6D45D0048B9E7 /* TravelMapVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TravelMapVC.swift; sourceTree = "<group>"; };
 		333E96491CC6D4680048B9E7 /* PhotoAlbumVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAlbumVC.swift; sourceTree = "<group>"; };
 		333E964B1CC6D51F0048B9E7 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		3348C74E1CC736460046179A /* FlickerWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickerWorker.swift; sourceTree = "<group>"; };
+		3348C74E1CC736460046179A /* DownloadWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadWorker.swift; sourceTree = "<group>"; };
 		3348C7501CC743E20046179A /* FlickerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickerModel.swift; sourceTree = "<group>"; };
 		33A3E1BB1CC1760100773D5D /* VirtualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A3E1BE1CC1760100773D5D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -69,7 +69,7 @@
 				33A3E1BE1CC1760100773D5D /* AppDelegate.swift */,
 				333E96471CC6D45D0048B9E7 /* TravelMapVC.swift */,
 				333E96491CC6D4680048B9E7 /* PhotoAlbumVC.swift */,
-				3348C74E1CC736460046179A /* FlickerWorker.swift */,
+				3348C74E1CC736460046179A /* DownloadWorker.swift */,
 				3348C7501CC743E20046179A /* FlickerModel.swift */,
 				33A3E1C21CC1760100773D5D /* Main.storyboard */,
 				33A3E1C81CC1760100773D5D /* Assets.xcassets */,
@@ -159,7 +159,7 @@
 			files = (
 				333E96481CC6D45D0048B9E7 /* TravelMapVC.swift in Sources */,
 				33A3E1BF1CC1760100773D5D /* AppDelegate.swift in Sources */,
-				3348C74F1CC736460046179A /* FlickerWorker.swift in Sources */,
+				3348C74F1CC736460046179A /* DownloadWorker.swift in Sources */,
 				33A3E1C71CC1760100773D5D /* VirtualTourist.xcdatamodeld in Sources */,
 				3348C7511CC743E20046179A /* FlickerModel.swift in Sources */,
 				333E964A1CC6D4680048B9E7 /* PhotoAlbumVC.swift in Sources */,

@@ -61,4 +61,10 @@ struct FlickerPhotoModel {
         self.farm = dict["farm"] as! Int
         self.title = dict["title"] as! String
     }
+    
+    func imageURL() -> NSURL {
+        //https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg
+        let str = "https://farm"+String(farm)+".staticflickr.com/"+server+"/"+photoId+"_"+secrete+".jpg"
+        return NSURL(string: str)!
+    }
 }

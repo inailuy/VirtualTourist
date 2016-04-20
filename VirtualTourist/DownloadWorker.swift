@@ -10,15 +10,15 @@
 // db helper
 import Foundation
 import CoreLocation
+import UIKit
 
-class FlickerWorker {
+class DownloadWorker {
     let APIKey = "6707facd0b30adf08698009c1ba926e1"
     let APISecret = "b41afba30a99624a"
     
     let flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search"
-    
-    
-    static let sharedInstance = FlickerWorker()
+
+    static let sharedInstance = DownloadWorker()
     
     func createRequest(url: NSURL, method: String) -> NSMutableURLRequest {
         let request = NSMutableURLRequest(URL: url)
@@ -65,5 +65,11 @@ class FlickerWorker {
             catch {}
         }
         task.resume()
+    }
+    
+    func getPhotoData(photoModel: FlickerPhotoModel) -> UIImage {
+        let url = photoModel.imageURL()
+        let data = NSData(contentsOfURL: url)
+        return UIImage(data:data!)!
     }
 }

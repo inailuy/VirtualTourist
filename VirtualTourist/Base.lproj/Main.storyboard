@@ -125,9 +125,20 @@
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5BK-uD-jp4">
+                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                </imageView>
+                                            </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="5BK-uD-jp4" secondAttribute="bottom" id="DRn-CR-gnb"/>
+                                            <constraint firstItem="5BK-uD-jp4" firstAttribute="leading" secondItem="4Ag-Lc-nLT" secondAttribute="leading" id="GK9-kE-s2U"/>
+                                            <constraint firstItem="5BK-uD-jp4" firstAttribute="top" secondItem="4Ag-Lc-nLT" secondAttribute="top" id="rah-Lc-IN9"/>
+                                            <constraint firstAttribute="trailing" secondItem="5BK-uD-jp4" secondAttribute="trailing" id="vp8-SM-odL"/>
+                                        </constraints>
                                         <size key="customSize" width="100" height="100"/>
                                     </collectionViewCell>
                                 </cells>

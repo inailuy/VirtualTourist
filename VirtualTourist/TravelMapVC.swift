@@ -28,7 +28,7 @@ class TravelMapVC: UIViewController, MKMapViewDelegate {
             annotation.coordinate = newCoordinates
             
             mapView.addAnnotation(annotation)
-            FlickerWorker.sharedInstance.getPhotosWithLocation(newCoordinates)
+            DownloadWorker.sharedInstance.getPhotosWithLocation(newCoordinates)
         }
     }
     //MARK: MapView Delegate

@@ -47,10 +47,10 @@ class PhotoAlbumVC: UIViewController, UICollectionViewDelegate, UICollectionView
         cell.backgroundColor = UIColor.blackColor()
         let imgView = cell.viewWithTag(100) as! UIImageView
         
-        let photoModel = photoArray[indexPath.row]
+        let photo = photoArray[indexPath.row]
         let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
         dispatch_async(dispatch_get_global_queue(priority, 0)) {
-            let img = DownloadWorker.sharedInstance.getPhotoData(photoModel)
+            let img = DownloadWorker.sharedInstance.getPhotoData(photo)
             dispatch_async(dispatch_get_main_queue(), {
                 imgView.image = img
             })

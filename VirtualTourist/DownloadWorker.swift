@@ -29,8 +29,7 @@ class DownloadWorker {
         return request
     }
     
-    func getPhotosWithLocation(location: CLLocationCoordinate2D) {
-        let getModel = FlickerGetModel(coor: location)
+    func getPhotosWithLocation(getModel: FlickerGetModel, pin: Pin, completion: (array: NSArray) -> Void) {
         let request = createRequest(NSURL(string:flickrURL+getModel.methodString())!, method: "get")
 
         let session = NSURLSession.sharedSession()
@@ -54,21 +53,30 @@ class DownloadWorker {
                 let json = try NSJSONSerialization.JSONObjectWithData(correctedData!, options: .AllowFragments)
                 
                 let dic = json["photos"] as! NSDictionary
-                let arr = dic["photo"]
-                photoArray.removeAll()
-                for obj in arr as! NSArray {
-                    let photo = FlickerPhotoModel(fromDict: obj as! NSDictionary)
-                    photoArray.append(photo)
+                let photoArr = dic["photo"]
+                //photoArray.removeAll()
+                let arr = NSMutableArray()
+                for obj in photoArr as! NSArray {
+                    //let photo = FlickerPhotoModel(fromDict: obj as! NSDictionary)
+                    // create, save photo to db
+                    let photo = DatabaseWorker.sharedInstance.createAndSavePhoto(obj as! NSDictionary, pin: pin)
+                    arr.addObject(photo)
                 }
-                print(photoArray.count)
+                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                do {
+                    try appDelegate.managedObjectContext.save()
+                } catch let error as NSError  {
+                    print("Could not save \(error), \(error.userInfo)")
+                }
+                completion (array: arr)
             }
             catch {}
         }
         task.resume()
     }
     
-    func getPhotoData(photoModel: FlickerPhotoModel) -> UIImage {
-        let url = photoModel.imageURL()
+    func getPhotoData(photo: Photo) -> UIImage {
+        let url = photo.imageURL()
         let data = NSData(contentsOfURL: url)
         return UIImage(data:data!)!
     }

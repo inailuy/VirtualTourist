@@ -9,7 +9,7 @@
 import Foundation
 import CoreLocation
 
-var photoArray = [FlickerPhotoModel]()
+var photoArray = [Photo]()
 
 struct FlickerGetModel {
     let apiKey = "6707facd0b30adf08698009c1ba926e1"

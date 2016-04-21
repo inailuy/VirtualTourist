@@ -14,11 +14,25 @@ class TravelMapVC: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
     var annotationArray = NSMutableArray()
     var deletePinState = false
-    var selectedCoordinate : CLLocationCoordinate2D!
-
+    var selectedPin : Pin!
+    var pinArray = [Pin]()
+    
     let DONE = "Done"
     let EDIT = "Edit"
     let photoSegue = "photoSegue"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        DatabaseWorker.sharedInstance.fetchAllPin({(array: NSArray) in
+            self.pinArray = array as! [Pin]
+            for pin in array as! [Pin] {
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = pin.coordinate()
+                self.mapView.addAnnotation(annotation)
+            }
+        })
+    }
     
     @IBAction func longPressedGesture(sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.Ended && deletePinState == false {
@@ -26,20 +40,37 @@ class TravelMapVC: UIViewController, MKMapViewDelegate {
             let newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
             let annotation = MKPointAnnotation()
             annotation.coordinate = newCoordinates
-            
             mapView.addAnnotation(annotation)
-            DownloadWorker.sharedInstance.getPhotosWithLocation(newCoordinates)
+            let getModel = FlickerGetModel(coor: newCoordinates)
+            
+            let pin = DatabaseWorker.sharedInstance.createAndSavePin(newCoordinates)
+            DownloadWorker.sharedInstance.getPhotosWithLocation(getModel, pin: pin, completion: {(array: NSArray) in
+                self.pinArray.append(pin)
+            })
         }
     }
     //MARK: MapView Delegate
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
         if deletePinState == false {
-            selectedCoordinate = view.annotation?.coordinate
+            let viewCoor = view.annotation?.coordinate
+            for pin in pinArray as [Pin] {
+                let pinCoor = pin.coordinate()
+                if pinCoor.latitude == viewCoor?.latitude && pinCoor.longitude == viewCoor?.longitude {
+                    selectedPin = pin
+                }
+            }
             performSegueWithIdentifier(photoSegue, sender: nil)
         } else {
+            for pin in pinArray {
+                let pinCoor = pin.coordinate()
+                let viewCoor = view.annotation?.coordinate
+                if pinCoor.latitude == viewCoor?.latitude && pinCoor.longitude == viewCoor?.longitude {
+                    DatabaseWorker.sharedInstance.deletePin(pin)
+                    pinArray.removeAtIndex(pinArray.indexOf(pin)!)
+                }
+            }
             mapView.removeAnnotation(view.annotation!)
         }
-        
     }
     
     @IBAction func barButtonPressed(sender: UIBarButtonItem) {
@@ -73,7 +104,8 @@ class TravelMapVC: UIViewController, MKMapViewDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == photoSegue {
             let vc = segue.destinationViewController as! PhotoAlbumVC
-            vc.selectedCoordinate = selectedCoordinate
+            vc.selectedCoordinate = selectedPin.coordinate()
+            photoArray = selectedPin.photosInPin!.allObjects as! [Photo]
         }
     }
 }

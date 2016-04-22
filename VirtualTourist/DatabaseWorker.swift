@@ -56,7 +56,8 @@ class DatabaseWorker {
         // Delete photos related to pin
         if pin.photosInPin?.count > 0 {
             for photo in pin.photosInPin?.allObjects as! [Photo] {
-                 appDelegate.managedObjectContext.deleteObject(photo)
+                deletePhotoFromDirectory(photo)
+                appDelegate.managedObjectContext.deleteObject(photo)
             }
         }
         appDelegate.managedObjectContext.deleteObject(pin)
@@ -64,6 +65,31 @@ class DatabaseWorker {
             try appDelegate.managedObjectContext.save()
         } catch let error as NSError  {
             print("Could not save \(error), \(error.userInfo)")
+        }
+    }
+    
+    func deletePhotoFromDirectory(photo: Photo) {
+        let fileManager = NSFileManager.defaultManager()
+        do {
+            try fileManager.removeItemAtPath(photo.imageFilePath())
+        }
+        catch let error as NSError {
+            print("Ooops! Something went wrong: \(error)")
+        }
+    }
+    
+    func printDirectory() {
+        // We need just to get the documents folder url
+        let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+        
+        // now lets get the directory contents (including folders)
+        do {
+            let directoryContents = try NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
+            print(directoryContents)
+            print("\n")
+            
+        } catch let error as NSError {
+            print(error.localizedDescription)
         }
     }
 }

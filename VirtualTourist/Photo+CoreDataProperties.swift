@@ -20,7 +20,6 @@ extension Photo {
     @NSManaged var secrete: String?
     @NSManaged var server: String?
     @NSManaged var title: String?
-    @NSManaged var filePath: String?
     @NSManaged var belongsToPin: Pin?
 
     func populatePhoto(fromDict dict: NSDictionary) {
@@ -40,5 +39,10 @@ extension Photo {
         let secrete = self.secrete!+"_s.jpg"
         let str = farm+server+id+secrete
         return NSURL(string: str)!
+    }
+    
+    func imageFilePath() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) as NSArray
+        return paths.firstObject as! String + "/" + photoId!
     }
 }

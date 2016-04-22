@@ -2,7 +2,6 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15D21" minimumToolsVersion="Xcode 7.0">
     <entity name="Photo" representedClassName=".Photo" syncable="YES">
         <attribute name="farm" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="filePath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="owner" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="photoId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="secrete" optional="YES" attributeType="String" syncable="YES"/>
@@ -17,7 +16,7 @@
         <relationship name="photosInPin" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Photo" inverseName="belongsToPin" inverseEntity="Photo" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Photo" positionX="333" positionY="-84" width="128" height="163"/>
+        <element name="Photo" positionX="333" positionY="-84" width="128" height="148"/>
         <element name="Pin" positionX="-45" positionY="-18" width="135" height="103"/>
     </elements>
 </model>

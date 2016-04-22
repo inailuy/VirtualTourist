@@ -44,9 +44,12 @@ class TravelMapVC: UIViewController, MKMapViewDelegate {
             let getModel = FlickerGetModel(coor: newCoordinates)
             
             let pin = DatabaseWorker.sharedInstance.createAndSavePin(newCoordinates)
-            DownloadWorker.sharedInstance.getPhotosWithLocation(getModel, pin: pin, completion: {(array: NSArray) in
-                self.pinArray.append(pin)
-            })
+            let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+            dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                DownloadWorker.sharedInstance.getPhotosWithLocation(getModel, pin: pin, completion: {(array: NSArray) in
+                    self.pinArray.append(pin)
+                })
+            }
         }
     }
     //MARK: MapView Delegate
@@ -74,6 +77,7 @@ class TravelMapVC: UIViewController, MKMapViewDelegate {
     }
     
     @IBAction func barButtonPressed(sender: UIBarButtonItem) {
+        DatabaseWorker.sharedInstance.printDirectory()
         deleteLabelAnimation(!deletePinState)
         if deletePinState == true {
             sender.title = DONE

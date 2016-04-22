@@ -54,13 +54,12 @@ class DownloadWorker {
                 
                 let dic = json["photos"] as! NSDictionary
                 let photoArr = dic["photo"]
-                //photoArray.removeAll()
+                
                 let arr = NSMutableArray()
                 for obj in photoArr as! NSArray {
-                    //let photo = FlickerPhotoModel(fromDict: obj as! NSDictionary)
-                    // create, save photo to db
                     let photo = DatabaseWorker.sharedInstance.createAndSavePhoto(obj as! NSDictionary, pin: pin)
                     arr.addObject(photo)
+                    DownloadWorker.sharedInstance.getPhotoData(photo)
                 }
                 let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                 do {
@@ -75,9 +74,35 @@ class DownloadWorker {
         task.resume()
     }
     
-    func getPhotoData(photo: Photo) -> UIImage {
-        let url = photo.imageURL()
-        let data = NSData(contentsOfURL: url)
-        return UIImage(data:data!)!
+    func getPhotoData(photo: Photo) {
+        let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+        dispatch_async(dispatch_get_global_queue(priority, 0)) {
+            let url = photo.imageURL()
+            let data = NSData(contentsOfURL: url)
+            dispatch_async(dispatch_get_main_queue(), {
+                let documentsURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+                if let image = UIImage(data: data!) {
+                    let fileURL = documentsURL.URLByAppendingPathComponent(photo.photoId!)
+                    if let pngImageData = UIImagePNGRepresentation(image) {
+                        print(fileURL)
+                        pngImageData.writeToURL(fileURL, atomically: false)
+                        NSNotificationCenter.defaultCenter().postNotificationName("UpdateForPhotoDownload", object: nil)
+                    }
+                }
+            })
+        }
+
+    }
+    
+    func getDocumentsURL() -> NSURL {
+        let documentsURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+        return documentsURL
+    }
+    
+    func fileInDocumentsDirectory(filename: String) -> String {
+        
+        let fileURL = getDocumentsURL().URLByAppendingPathComponent(filename)
+        return fileURL.path!
+        
     }
 }

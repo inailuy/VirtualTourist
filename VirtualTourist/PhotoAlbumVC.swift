@@ -25,6 +25,12 @@ class PhotoAlbumVC: UIViewController, UICollectionViewDelegate, UICollectionView
         annotation.coordinate = selectedCoordinate!
         mapView.setRegion(adjustedRegion, animated: false)
         mapView.addAnnotation(annotation)
+        
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: #selector(photosUpdated),
+            name: "UpdateForPhotoDownload",
+            object: nil)
     }
     
     @IBAction func toolbarButtonPressed(sender: UIBarButtonItem) {
@@ -46,15 +52,8 @@ class PhotoAlbumVC: UIViewController, UICollectionViewDelegate, UICollectionView
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("id", forIndexPath: indexPath)
         cell.backgroundColor = UIColor.blackColor()
         let imgView = cell.viewWithTag(100) as! UIImageView
-        
         let photo = photoArray[indexPath.row]
-        let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-        dispatch_async(dispatch_get_global_queue(priority, 0)) {
-            let img = DownloadWorker.sharedInstance.getPhotoData(photo)
-            dispatch_async(dispatch_get_main_queue(), {
-                imgView.image = img
-            })
-        }
+        imgView.image = UIImage.init(contentsOfFile:photo.imageFilePath())
         return cell
     }
     
@@ -81,5 +80,9 @@ class PhotoAlbumVC: UIViewController, UICollectionViewDelegate, UICollectionView
             title = "Remove Selected Pictures"
         }
         toolbarButton.title = title
+    }
+    
+    @objc func photosUpdated(notification: NSNotification){
+        self.collectionView.reloadData()
     }
 }

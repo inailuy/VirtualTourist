@@ -111,12 +111,12 @@ class TravelMapVC: UIViewController, MKMapViewDelegate {
         if segue.identifier == photoSegue {
             let vc = segue.destinationViewController as! PhotoAlbumVC
             vc.selectedCoordinate = selectedPin.coordinate()
+            vc.selectedPin = selectedPin
             if selectedPin.photosInPin?.allObjects.count == 0 {
                 let getModel = FlickerGetModel(coor: selectedPin.coordinate())
                 DownloadWorker.sharedInstance.getPhotosWithLocation(getModel, pin: selectedPin)
             } else {
                 let vc = segue.destinationViewController as! PhotoAlbumVC
-                vc.selectedPin = selectedPin
                 let array = selectedPin.photosInPin!.allObjects
                 vc.photoArray = NSMutableArray(array: array)
             }

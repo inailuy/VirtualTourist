@@ -71,6 +71,8 @@ class PhotoAlbumVC: UIViewController, UICollectionViewDelegate, UICollectionView
         return cell
     }
     
+    // check why images after being placed online and come back online arent being loaded when enter the view
+    
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = collectionView.cellForItemAtIndexPath(indexPath)
         let imgView = cell!.viewWithTag(100) as! UIImageView

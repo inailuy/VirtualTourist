@@ -83,19 +83,19 @@ class DownloadWorker {
         
         let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
         dispatch_async(dispatch_get_global_queue(priority, 0)) {
-            let url = photo.imageURL()
-            let data = NSData(contentsOfURL: url)
-            dispatch_async(dispatch_get_main_queue(), {
-                let documentsURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+            if photo.doesFileForImageExist() == false {
+                let url = photo.imageURL()
+                let data = NSData(contentsOfURL: url)
+                let docsURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
                 if let image = UIImage(data: data!) {
-                    let fileURL = documentsURL.URLByAppendingPathComponent(photo.photoId!)
+                    let fileURL = docsURL.URLByAppendingPathComponent(photo.photoId!)
                     if let imageData = UIImagePNGRepresentation(image) {
                         print(fileURL)
                         imageData.writeToURL(fileURL, atomically: false)
                         NSNotificationCenter.defaultCenter().postNotificationName("UpdateForPhotoDownload", object: nil)
                     }
                 }
-            })
+            }
         }
     }
     

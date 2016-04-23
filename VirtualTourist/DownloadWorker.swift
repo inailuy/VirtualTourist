@@ -62,11 +62,12 @@ class DownloadWorker {
                 }
                 for obj in photoArr as! NSArray {
                     let photo = DatabaseWorker.sharedInstance.createAndSavePhoto(obj as! NSDictionary, pin: pin)
-                    DownloadWorker.sharedInstance.getPhotoData(photo)
+                    DownloadWorker.sharedInstance.getPhotoData(photo, completion: { image in })
                 }
                 let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                 do {
                     try appDelegate.managedObjectContext.save()
+                    NSNotificationCenter.defaultCenter().postNotificationName("UpdateForPhotoDownload", object: nil)
                 } catch let error as NSError  {
                     print("Could not save \(error), \(error.userInfo)")
                 }
@@ -76,7 +77,7 @@ class DownloadWorker {
         task.resume()
     }
     
-    func getPhotoData(photo: Photo) {
+    func getPhotoData(photo: Photo, completion: (image: UIImage) -> Void) {
         if !hasConnectivity() {
             return
         }
@@ -92,6 +93,7 @@ class DownloadWorker {
                     if let imageData = UIImagePNGRepresentation(image) {
                         print(fileURL)
                         imageData.writeToURL(fileURL, atomically: false)
+                        completion(image: image)
                         NSNotificationCenter.defaultCenter().postNotificationName("UpdateForPhotoDownload", object: nil)
                     }
                 }

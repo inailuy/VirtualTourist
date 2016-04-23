@@ -60,13 +60,16 @@ class PhotoAlbumVC: UIViewController, UICollectionViewDelegate, UICollectionView
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("id", forIndexPath: indexPath)
         let imgView = cell.viewWithTag(100) as! UIImageView
         imgView.alpha = 1.0
-        imgView.hidden = false
         let photo = photoArray[indexPath.row] as! Photo
         if photo.doesFileForImageExist() {
             imgView.image = UIImage.init(contentsOfFile:photo.imageFilePath())
         } else {
             imgView.hidden = true
-            DownloadWorker.sharedInstance.getPhotoData(photo)
+            DownloadWorker.sharedInstance.getPhotoData(photo, completion: { image in
+                print(photo.photoId)
+                imgView.image = image
+                imgView.hidden = false
+            })
         }
         return cell
     }

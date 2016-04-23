@@ -42,7 +42,18 @@ extension Photo {
     }
     
     func imageFilePath() -> String {
+        if photoId == nil { return "" }
+        
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) as NSArray
         return paths.firstObject as! String + "/" + photoId!
+    }
+    
+    func doesFileForImageExist() -> Bool{
+        var value = false
+        let fileManager = NSFileManager.defaultManager()
+        if (fileManager.fileExistsAtPath(imageFilePath())) {
+            value = true
+        }
+        return value
     }
 }

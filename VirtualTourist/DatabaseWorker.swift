@@ -47,20 +47,43 @@ class DatabaseWorker {
         let photo = NSEntityDescription.insertNewObjectForEntityForName("Photo", inManagedObjectContext: managedContext) as! Photo
         photo.populatePhoto(fromDict: dict)
         photo.belongsToPin = pin
-        
+        print(dict)
         return photo
     }
     
-    func deletePin(pin: Pin) {
+    func deletePinAndPhotos(pin: Pin) {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         // Delete photos related to pin
+        deleteAllPhotosInPin(pin, shouldSave: false)
+        appDelegate.managedObjectContext.deleteObject(pin)
+        do {
+            try appDelegate.managedObjectContext.save()
+        } catch let error as NSError  {
+            print("Could not save \(error), \(error.userInfo)")
+        }
+    }
+    
+    func deleteAllPhotosInPin(pin: Pin, shouldSave: Bool) {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         if pin.photosInPin?.count > 0 {
             for photo in pin.photosInPin?.allObjects as! [Photo] {
                 deletePhotoFromDirectory(photo)
                 appDelegate.managedObjectContext.deleteObject(photo)
             }
         }
-        appDelegate.managedObjectContext.deleteObject(pin)
+        if shouldSave {
+            do {
+                try appDelegate.managedObjectContext.save()
+            } catch let error as NSError  {
+                print("Could not save \(error), \(error.userInfo)")
+            }
+        }
+    }
+    
+    func deletePhoto(photo: Photo) {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        deletePhotoFromDirectory(photo)
+        appDelegate.managedObjectContext.deleteObject(photo)
         do {
             try appDelegate.managedObjectContext.save()
         } catch let error as NSError  {

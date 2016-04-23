@@ -29,12 +29,14 @@ class DownloadWorker {
         return request
     }
     
-    func getPhotosWithLocation(getModel: FlickerGetModel, pin: Pin, completion: (array: NSArray) -> Void) {
+    func getPhotosWithLocation(getModel: FlickerGetModel, pin: Pin) {
         let request = createRequest(NSURL(string:flickrURL+getModel.methodString())!, method: "get")
-
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in            
             do {
+                if !self.hasConnectivity() {
+                    return
+                }
                 // ***Flicker JSON is wierd this helped http://stackoverflow.com/a/16187360/507299 ***
                 
                 //get the feed
@@ -55,10 +57,11 @@ class DownloadWorker {
                 let dic = json["photos"] as! NSDictionary
                 let photoArr = dic["photo"]
                 
-                let arr = NSMutableArray()
+                if pin.photosInPin?.allObjects.count > 0 {
+                    DatabaseWorker.sharedInstance.deleteAllPhotosInPin(pin, shouldSave: true)
+                }
                 for obj in photoArr as! NSArray {
                     let photo = DatabaseWorker.sharedInstance.createAndSavePhoto(obj as! NSDictionary, pin: pin)
-                    arr.addObject(photo)
                     DownloadWorker.sharedInstance.getPhotoData(photo)
                 }
                 let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -67,7 +70,6 @@ class DownloadWorker {
                 } catch let error as NSError  {
                     print("Could not save \(error), \(error.userInfo)")
                 }
-                completion (array: arr)
             }
             catch {}
         }
@@ -75,6 +77,10 @@ class DownloadWorker {
     }
     
     func getPhotoData(photo: Photo) {
+        if !hasConnectivity() {
+            return
+        }
+        
         let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
         dispatch_async(dispatch_get_global_queue(priority, 0)) {
             let url = photo.imageURL()
@@ -83,26 +89,19 @@ class DownloadWorker {
                 let documentsURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
                 if let image = UIImage(data: data!) {
                     let fileURL = documentsURL.URLByAppendingPathComponent(photo.photoId!)
-                    if let pngImageData = UIImagePNGRepresentation(image) {
+                    if let imageData = UIImagePNGRepresentation(image) {
                         print(fileURL)
-                        pngImageData.writeToURL(fileURL, atomically: false)
+                        imageData.writeToURL(fileURL, atomically: false)
                         NSNotificationCenter.defaultCenter().postNotificationName("UpdateForPhotoDownload", object: nil)
                     }
                 }
             })
         }
-
     }
     
-    func getDocumentsURL() -> NSURL {
-        let documentsURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
-        return documentsURL
-    }
-    
-    func fileInDocumentsDirectory(filename: String) -> String {
-        
-        let fileURL = getDocumentsURL().URLByAppendingPathComponent(filename)
-        return fileURL.path!
-        
+    func hasConnectivity() -> Bool {
+        let reachability: Reachability = Reachability.reachabilityForInternetConnection()
+        let networkStatus: Int = reachability.currentReachabilityStatus().rawValue
+        return networkStatus != 0
     }
 }

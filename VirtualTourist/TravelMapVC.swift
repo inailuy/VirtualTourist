@@ -44,11 +44,10 @@ class TravelMapVC: UIViewController, MKMapViewDelegate {
             let getModel = FlickerGetModel(coor: newCoordinates)
             
             let pin = DatabaseWorker.sharedInstance.createAndSavePin(newCoordinates)
+            self.pinArray.append(pin)
             let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
             dispatch_async(dispatch_get_global_queue(priority, 0)) {
-                DownloadWorker.sharedInstance.getPhotosWithLocation(getModel, pin: pin, completion: {(array: NSArray) in
-                    self.pinArray.append(pin)
-                })
+                DownloadWorker.sharedInstance.getPhotosWithLocation(getModel, pin: pin)
             }
         }
     }
@@ -57,18 +56,21 @@ class TravelMapVC: UIViewController, MKMapViewDelegate {
         if deletePinState == false {
             let viewCoor = view.annotation?.coordinate
             for pin in pinArray as [Pin] {
+                print(pin.latitude)
                 let pinCoor = pin.coordinate()
                 if pinCoor.latitude == viewCoor?.latitude && pinCoor.longitude == viewCoor?.longitude {
+                    print("slectedPin")
+                    print(pin)
                     selectedPin = pin
+                    performSegueWithIdentifier(photoSegue, sender: nil)
                 }
             }
-            performSegueWithIdentifier(photoSegue, sender: nil)
         } else {
             for pin in pinArray {
                 let pinCoor = pin.coordinate()
                 let viewCoor = view.annotation?.coordinate
                 if pinCoor.latitude == viewCoor?.latitude && pinCoor.longitude == viewCoor?.longitude {
-                    DatabaseWorker.sharedInstance.deletePin(pin)
+                    DatabaseWorker.sharedInstance.deletePinAndPhotos(pin)
                     pinArray.removeAtIndex(pinArray.indexOf(pin)!)
                 }
             }
@@ -109,7 +111,15 @@ class TravelMapVC: UIViewController, MKMapViewDelegate {
         if segue.identifier == photoSegue {
             let vc = segue.destinationViewController as! PhotoAlbumVC
             vc.selectedCoordinate = selectedPin.coordinate()
-            photoArray = selectedPin.photosInPin!.allObjects as! [Photo]
+            if selectedPin.photosInPin?.allObjects.count == 0 {
+                let getModel = FlickerGetModel(coor: selectedPin.coordinate())
+                DownloadWorker.sharedInstance.getPhotosWithLocation(getModel, pin: selectedPin)
+            } else {
+                let vc = segue.destinationViewController as! PhotoAlbumVC
+                vc.selectedPin = selectedPin
+                let array = selectedPin.photosInPin!.allObjects
+                vc.photoArray = NSMutableArray(array: array)
+            }
         }
     }
 }

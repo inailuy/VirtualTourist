@@ -13,8 +13,9 @@ class PhotoAlbumVC: UIViewController, UICollectionViewDelegate, UICollectionView
     @IBOutlet weak var toolbarButton: UIBarButtonItem!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var mapView: MKMapView!
-    var selectedCells = NSMutableSet()
-    var numCell = 10
+    var selectedPin : Pin!
+    var photoArray = NSMutableArray()
+    var selectedCells = NSMutableArray()
     var selectedCoordinate : CLLocationCoordinate2D!
 
     override func viewDidLoad() {
@@ -35,37 +36,50 @@ class PhotoAlbumVC: UIViewController, UICollectionViewDelegate, UICollectionView
     
     @IBAction func toolbarButtonPressed(sender: UIBarButtonItem) {
         if selectedCells.count > 0 {
-            numCell = numCell - selectedCells.allObjects.count
-            collectionView.deleteItemsAtIndexPaths(selectedCells.allObjects as! [NSIndexPath])
+            for index in selectedCells {
+                if photoArray.count > index.row {
+                    let photo = photoArray[index.row] as! Photo
+                    DatabaseWorker.sharedInstance.deletePhoto(photo)
+                    photoArray.removeObject(photo)
+                }
+            }
+            collectionView.reloadData()
         } else {
             // Reload data
-            selectedCells.removeAllObjects()
-            numCell = 10
-            collectionView.reloadData()
+            photoArray.removeAllObjects()
+            var getModel = FlickerGetModel(coor: (selectedPin?.coordinate())!)
+            selectedPin?.page = NSNumber(int: (selectedPin!.page!.intValue) + 1)
+            getModel.page = (selectedPin?.page?.integerValue)!
+            DownloadWorker.sharedInstance.getPhotosWithLocation(getModel, pin: selectedPin!)
         }
-        
         selectedCells.removeAllObjects()
         updateToolbarTitle()
     }
     //MARK: UICollectionView DataSource/Delegate
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("id", forIndexPath: indexPath)
-        cell.backgroundColor = UIColor.blackColor()
         let imgView = cell.viewWithTag(100) as! UIImageView
-        let photo = photoArray[indexPath.row]
-        imgView.image = UIImage.init(contentsOfFile:photo.imageFilePath())
+        imgView.alpha = 1.0
+        imgView.hidden = false
+        let photo = photoArray[indexPath.row] as! Photo
+        if photo.doesFileForImageExist() {
+            imgView.image = UIImage.init(contentsOfFile:photo.imageFilePath())
+        } else {
+            imgView.hidden = true
+            DownloadWorker.sharedInstance.getPhotoData(photo)
+        }
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = collectionView.cellForItemAtIndexPath(indexPath)
+        let imgView = cell!.viewWithTag(100) as! UIImageView
         if selectedCells.containsObject(indexPath) {
             selectedCells.removeObject(indexPath)
-            let cell = collectionView.cellForItemAtIndexPath(indexPath)
-            cell?.backgroundColor = UIColor.blackColor()
+            imgView.alpha = 1.0
         } else {
             selectedCells.addObject(indexPath)
-            let cell = collectionView.cellForItemAtIndexPath(indexPath)
-            cell?.backgroundColor = UIColor.grayColor()
+            imgView.alpha = 0.3
         }
         updateToolbarTitle()
     }
@@ -83,6 +97,11 @@ class PhotoAlbumVC: UIViewController, UICollectionViewDelegate, UICollectionView
     }
     
     @objc func photosUpdated(notification: NSNotification){
+        if selectedPin.photosInPin?.allObjects.count > 0 && photoArray.count == 0 {
+            let array = selectedPin.photosInPin!.allObjects
+            photoArray = NSMutableArray(array: array)
+        }
+        
         self.collectionView.reloadData()
     }
 }

@@ -9,13 +9,13 @@
 import Foundation
 import CoreLocation
 
-var photoArray = [Photo]()
+//var photoArray = [Photo]()
 
 struct FlickerGetModel {
     let apiKey = "6707facd0b30adf08698009c1ba926e1"
     let coor : CLLocationCoordinate2D
     let accuracy = "11"
-    let perPage = "15"
+    let perPage = "10"
     var page = 1
     
     init (coor : CLLocationCoordinate2D){

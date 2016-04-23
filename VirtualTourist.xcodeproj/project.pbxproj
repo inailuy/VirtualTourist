@@ -18,6 +18,7 @@
 		3363E7F51CC98105008B5BED /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3363E7F11CC98105008B5BED /* Pin.swift */; };
 		3363E7F61CC98105008B5BED /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3363E7F21CC98105008B5BED /* Photo+CoreDataProperties.swift */; };
 		3363E7F71CC98105008B5BED /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3363E7F31CC98105008B5BED /* Photo.swift */; };
+		3363E7FB1CC9F971008B5BED /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 3363E7FA1CC9F971008B5BED /* Reachability.m */; };
 		33A3E1BF1CC1760100773D5D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A3E1BE1CC1760100773D5D /* AppDelegate.swift */; };
 		33A3E1C41CC1760100773D5D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33A3E1C21CC1760100773D5D /* Main.storyboard */; };
 		33A3E1C91CC1760100773D5D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33A3E1C81CC1760100773D5D /* Assets.xcassets */; };
@@ -36,6 +37,9 @@
 		3363E7F11CC98105008B5BED /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
 		3363E7F21CC98105008B5BED /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3363E7F31CC98105008B5BED /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		3363E7F81CC9F971008B5BED /* VirtualTourist-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VirtualTourist-Bridging-Header.h"; sourceTree = "<group>"; };
+		3363E7F91CC9F971008B5BED /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		3363E7FA1CC9F971008B5BED /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		33A3E1BB1CC1760100773D5D /* VirtualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33A3E1BE1CC1760100773D5D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33A3E1C31CC1760100773D5D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -88,9 +92,12 @@
 				3363E7F21CC98105008B5BED /* Photo+CoreDataProperties.swift */,
 				3363E7F31CC98105008B5BED /* Photo.swift */,
 				33A3E1C21CC1760100773D5D /* Main.storyboard */,
+				3363E7F91CC9F971008B5BED /* Reachability.h */,
+				3363E7FA1CC9F971008B5BED /* Reachability.m */,
 				33A3E1C81CC1760100773D5D /* Assets.xcassets */,
 				33A3E1CA1CC1760100773D5D /* LaunchScreen.storyboard */,
 				33A3E1CD1CC1760100773D5D /* Info.plist */,
+				3363E7F81CC9F971008B5BED /* VirtualTourist-Bridging-Header.h */,
 			);
 			path = VirtualTourist;
 			sourceTree = "<group>";
@@ -182,6 +189,7 @@
 				3363E7F71CC98105008B5BED /* Photo.swift in Sources */,
 				331E2A5B1CC8447D000AA3C1 /* DatabaseWorker.swift in Sources */,
 				3363E7F61CC98105008B5BED /* Photo+CoreDataProperties.swift in Sources */,
+				3363E7FB1CC9F971008B5BED /* Reachability.m in Sources */,
 				333E964A1CC6D4680048B9E7 /* PhotoAlbumVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,6 +303,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = VirtualTourist/Info.plist;
@@ -302,6 +311,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = inailuy.VirtualTourist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "VirtualTourist/VirtualTourist-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -309,6 +320,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = VirtualTourist/Info.plist;
@@ -316,6 +328,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = inailuy.VirtualTourist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "VirtualTourist/VirtualTourist-Bridging-Header.h";
 			};
 			name = Release;
 		};

@@ -5,10 +5,9 @@ Travel Locations Map View:
 * Allows the user to drop pins around the world
 * Photo Album View: Allows the users to download and edit an album for a location
 
-<img src="https://lh4.googleusercontent.com/IoTiaZiXeSggp_emr1yOrRHLPVwGm0qDcaDgqdDpRBZFHn02w6731e4HFhnmmupld6pmYyQgCQGmtac0q7AT_7Dj7xt6TsyKDbUF5iqsGIAzbwT-b6FSY5Q6Bw9NpWcriQLCvgI" width="263" height="500"> 
-
-
 ### Travel Locations Map
+
+<img src="https://lh4.googleusercontent.com/IoTiaZiXeSggp_emr1yOrRHLPVwGm0qDcaDgqdDpRBZFHn02w6731e4HFhnmmupld6pmYyQgCQGmtac0q7AT_7Dj7xt6TsyKDbUF5iqsGIAzbwT-b6FSY5Q6Bw9NpWcriQLCvgI" width="263" height="500"> 
 
 When the app first starts it will open to the map view. Users will be able to zoom and scroll around the map using standard pinch and drag gestures.
 The center of the map and the zoom level should be persistent. If the app is turned off, the map should return to the same state when it is turned on again.

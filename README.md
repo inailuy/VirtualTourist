@@ -1,3 +1,5 @@
+<img src="https://lh4.googleusercontent.com/IoTiaZiXeSggp_emr1yOrRHLPVwGm0qDcaDgqdDpRBZFHn02w6731e4HFhnmmupld6pmYyQgCQGmtac0q7AT_7Dj7xt6TsyKDbUF5iqsGIAzbwT-b6FSY5Q6Bw9NpWcriQLCvgI" width="263" height="500"> <img src="https://lh5.googleusercontent.com/VSpJv_4lE2sEH5AV_Utaet7cyPrSUqhCbDegDyKXXsTTwtbKPMk4FwpM30ixF-tYdlXqb4gj1vAurg5mA4pKYfeeCKWOWyFTWUPK1iCIUrFUp6GkB5KmG1ktnpPgbGZ2Q6CyXSQ" width="263" height="500">
+
 # VirtualTourist
 This app allows users specify travel locations around the world, and create virtual photo albums for each location. The locations and photo albums will be stored in Core Data.
 The app will have two view controller scenes.

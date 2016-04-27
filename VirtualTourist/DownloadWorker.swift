@@ -29,7 +29,7 @@ class DownloadWorker {
         return request
     }
     
-    func getPhotosWithLocation(getModel: FlickerGetModel, pin: Pin) {
+    func getPhotosWithLocation(getModel: FlickerGetModel, pin: Pin, loadImageData: Bool, completion:(photoArray: NSMutableArray) -> Void) {
         let request = createRequest(NSURL(string:flickrURL+getModel.methodString())!, method: "get")
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in            
@@ -56,21 +56,23 @@ class DownloadWorker {
                 
                 let dic = json["photos"] as! NSDictionary
                 let photoArr = dic["photo"]
-                
-                if pin.photosInPin?.allObjects.count > 0 {
-                    DatabaseWorker.sharedInstance.deleteAllPhotosInPin(pin, shouldSave: true)
-                }
+                let completionArray = NSMutableArray()
                 for obj in photoArr as! NSArray {
                     let photo = DatabaseWorker.sharedInstance.createAndSavePhoto(obj as! NSDictionary, pin: pin)
-                    DownloadWorker.sharedInstance.getPhotoData(photo, completion: { image in })
+                    completionArray.addObject(photo)
+                    if loadImageData == true {
+                        DownloadWorker.sharedInstance.getPhotoData(photo, completion: { image in })
+                    }
                 }
+                
                 let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                 do {
                     try appDelegate.managedObjectContext.save()
-                    NSNotificationCenter.defaultCenter().postNotificationName("UpdateForPhotoDownload", object: nil)
+                    completion(photoArray: completionArray)
                 } catch let error as NSError  {
                     print("Could not save \(error), \(error.userInfo)")
                 }
+                
             }
             catch {}
         }

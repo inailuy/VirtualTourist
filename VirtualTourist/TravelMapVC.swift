@@ -47,7 +47,7 @@ class TravelMapVC: UIViewController, MKMapViewDelegate {
             self.pinArray.append(pin)
             let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
             dispatch_async(dispatch_get_global_queue(priority, 0)) {
-                DownloadWorker.sharedInstance.getPhotosWithLocation(getModel, pin: pin)
+                DownloadWorker.sharedInstance.getPhotosWithLocation(getModel, pin: pin, loadImageData: true, completion: {_ in })
             }
         }
     }
@@ -114,7 +114,7 @@ class TravelMapVC: UIViewController, MKMapViewDelegate {
             vc.selectedPin = selectedPin
             if selectedPin.photosInPin?.allObjects.count == 0 {
                 let getModel = FlickerGetModel(coor: selectedPin.coordinate())
-                DownloadWorker.sharedInstance.getPhotosWithLocation(getModel, pin: selectedPin)
+                DownloadWorker.sharedInstance.getPhotosWithLocation(getModel, pin: selectedPin, loadImageData: false, completion:  {_ in })
             } else {
                 let vc = segue.destinationViewController as! PhotoAlbumVC
                 let array = selectedPin.photosInPin!.allObjects

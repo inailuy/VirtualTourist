@@ -36,21 +36,30 @@ class PhotoAlbumVC: UIViewController, UICollectionViewDelegate, UICollectionView
     
     @IBAction func toolbarButtonPressed(sender: UIBarButtonItem) {
         if selectedCells.count > 0 {
+            let tmp = self.photoArray.mutableCopy()
             for index in selectedCells {
-                if photoArray.count > index.row {
-                    let photo = photoArray[index.row] as! Photo
-                    DatabaseWorker.sharedInstance.deletePhoto(photo)
-                    photoArray.removeObject(photo)
-                }
+                let photo = self.photoArray[index.row] as! Photo
+                DatabaseWorker.sharedInstance.deletePhoto(photo)
+                tmp.removeObject(photo)
             }
+            photoArray = tmp as! NSMutableArray
             collectionView.reloadData()
         } else {
             // Reload data
+            sender.enabled = false
             photoArray.removeAllObjects()
             var getModel = FlickerGetModel(coor: (selectedPin?.coordinate())!)
             selectedPin?.page = NSNumber(int: (selectedPin!.page!.intValue) + 1)
             getModel.page = (selectedPin?.page?.integerValue)!
-            DownloadWorker.sharedInstance.getPhotosWithLocation(getModel, pin: selectedPin!)
+            DatabaseWorker.sharedInstance.deleteAllPhotosInPin(selectedPin, shouldSave: true)
+            DownloadWorker.sharedInstance.getPhotosWithLocation(getModel, pin: selectedPin!, loadImageData: false, completion: {
+                photoArray in
+                self.photoArray = photoArray.mutableCopy() as! NSMutableArray
+                dispatch_async(dispatch_get_main_queue(), {
+                    sender.enabled = true
+                    self.collectionView.reloadData()
+                })
+            })
         }
         selectedCells.removeAllObjects()
         updateToolbarTitle()
@@ -61,14 +70,25 @@ class PhotoAlbumVC: UIViewController, UICollectionViewDelegate, UICollectionView
         let imgView = cell.viewWithTag(100) as! UIImageView
         imgView.alpha = 1.0
         let photo = photoArray[indexPath.row] as! Photo
+    
         if photo.doesFileForImageExist() {
             imgView.image = UIImage.init(contentsOfFile:photo.imageFilePath())
         } else {
-            imgView.hidden = true
+            let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
+            activityIndicator.frame = CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height)
+            activityIndicator.startAnimating()
+            cell.addSubview(activityIndicator)
+            
+            imgView.image = nil
             DownloadWorker.sharedInstance.getPhotoData(photo, completion: { image in
-                print(photo.photoId)
-                imgView.image = image
-                imgView.hidden = false
+                dispatch_async(dispatch_get_main_queue(), {
+                    print("printing photoid")
+                    activityIndicator.stopAnimating()
+                    print(photo.photoId)
+                    imgView.image = image
+                })
+                
+                //imgView.hidden = false
             })
         }
         return cell

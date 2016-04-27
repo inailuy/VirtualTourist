@@ -5,8 +5,7 @@
 //  Created by inailuy on 4/20/16.
 //  Copyright © 2016 Udacity. All rights reserved.
 //
-
-import Foundation
+//
 import CoreData
 import UIKit
 import CoreLocation
@@ -26,7 +25,7 @@ class DatabaseWorker {
             print("Could not fetch \(error), \(error.userInfo)")
         }
     }
-    
+    //MARK: Creating
     func createAndSavePin(coordinate: CLLocationCoordinate2D) -> Pin {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
@@ -47,10 +46,9 @@ class DatabaseWorker {
         let photo = NSEntityDescription.insertNewObjectForEntityForName("Photo", inManagedObjectContext: managedContext) as! Photo
         photo.populatePhoto(fromDict: dict)
         photo.belongsToPin = pin
-        print(dict)
         return photo
     }
-    
+    //MARK: Deleting
     func deletePinAndPhotos(pin: Pin) {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         // Delete photos related to pin
@@ -90,7 +88,7 @@ class DatabaseWorker {
             print("Could not save \(error), \(error.userInfo)")
         }
     }
-    
+    // Deleting from directory
     func deletePhotoFromDirectory(photo: Photo) {
         let fileManager = NSFileManager.defaultManager()
         do {
@@ -98,21 +96,6 @@ class DatabaseWorker {
         }
         catch let error as NSError {
             print("Ooops! Something went wrong: \(error)")
-        }
-    }
-    
-    func printDirectory() {
-        // We need just to get the documents folder url
-        let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
-        
-        // now lets get the directory contents (including folders)
-        do {
-            let directoryContents = try NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
-            print(directoryContents)
-            print("\n")
-            
-        } catch let error as NSError {
-            print(error.localizedDescription)
         }
     }
 }

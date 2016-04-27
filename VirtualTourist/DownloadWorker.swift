@@ -5,19 +5,11 @@
 //  Created by inailuy on 4/19/16.
 //  Copyright © 2016 Udacity. All rights reserved.
 //
-// TODO: Change Class name to DownloadWorker
-// flicker image downloader
-// db helper
-import Foundation
 import CoreLocation
 import UIKit
 
 class DownloadWorker {
-    let APIKey = "6707facd0b30adf08698009c1ba926e1"
-    let APISecret = "b41afba30a99624a"
-    
     let flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search"
-
     static let sharedInstance = DownloadWorker()
     
     func createRequest(url: NSURL, method: String) -> NSMutableURLRequest {
@@ -38,7 +30,6 @@ class DownloadWorker {
                     return
                 }
                 // ***Flicker JSON is wierd this helped http://stackoverflow.com/a/16187360/507299 ***
-                
                 //get the feed
                 let badJSON = data
                 //convert to UTF8 encoded string so that we can manipulate the 'badness' out of Flickr's feed
@@ -93,10 +84,8 @@ class DownloadWorker {
                 if let image = UIImage(data: data!) {
                     let fileURL = docsURL.URLByAppendingPathComponent(photo.photoId!)
                     if let imageData = UIImagePNGRepresentation(image) {
-                        print(fileURL)
                         imageData.writeToURL(fileURL, atomically: false)
                         completion(image: image)
-                        NSNotificationCenter.defaultCenter().postNotificationName("UpdateForPhotoDownload", object: nil)
                     }
                 }
             }

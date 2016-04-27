@@ -8,8 +8,6 @@
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
 //  to delete and recreate this implementation file for your updated model.
 //
-
-import Foundation
 import CoreData
 
 extension Photo {
@@ -32,7 +30,6 @@ extension Photo {
     }
     
     func imageURL() -> NSURL {
-        //https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg
         let farm = "https://farm"+self.farm!.stringValue
         let server = ".staticflickr.com/"+self.server!
         let id = "/"+self.photoId!+"_"

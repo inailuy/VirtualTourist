@@ -5,11 +5,8 @@
 //  Created by inailuy on 4/19/16.
 //  Copyright © 2016 Udacity. All rights reserved.
 //
-
-import Foundation
+//  Helper used to authenticate Flickr API
 import CoreLocation
-
-//var photoArray = [Photo]()
 
 struct FlickerGetModel {
     let apiKey = "6707facd0b30adf08698009c1ba926e1"
@@ -42,29 +39,5 @@ struct FlickerGetModel {
         let pag = "page="+String(page)+and
         let format = "format=json"
         return and+key+lat+lon+per+pag+format
-    }
-}
-
-struct FlickerPhotoModel {
-    let photoId: String
-    let owner: String
-    let secrete: String
-    let server: String
-    let farm: Int
-    let title: String
-    
-    init(fromDict dict: NSDictionary) {
-        self.photoId = dict["id"] as! String
-        self.owner = dict["owner"] as! String
-        self.secrete = dict["secret"] as! String
-        self.server = dict["server"] as! String
-        self.farm = dict["farm"] as! Int
-        self.title = dict["title"] as! String
-    }
-    
-    func imageURL() -> NSURL {
-        //https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg
-        let str = "https://farm"+String(farm)+".staticflickr.com/"+server+"/"+photoId+"_"+secrete+".jpg"
-        return NSURL(string: str)!
     }
 }
